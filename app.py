@@ -41,13 +41,14 @@ def add_url():
     return f'新增成功！短網址代碼是：<b>{short}</b>'
 
 # 查詢原網址（GET）
-@app.route('/get_url')
-def get_url():
-    code = request.args.get('code')
-    if code in urls:
-        return f'原始網址是：<a href="{urls[code]}">{urls[code]}</a>'
+
+@app.route('/<short_code>')
+def redirect_to_external(short_code):
+    if short_code in urls:
+        org_url = urls[short_code]
+        return redirect(org_url)
     else:
-        return '查無此短碼'
+        return "Short URL not found", 404
 
 if __name__ == '__main__':
     app.run(debug=True)
